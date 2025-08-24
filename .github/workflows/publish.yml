@@ -32,8 +32,8 @@ jobs:
       - name: Install Poetry
         run: pipx install poetry
 
-      - name: Install deps
-        run: poetry install --no-interaction --no-root
+      - name: Install deps and package
+        run: poetry install --no-interaction
 
       - name: Run tests
         run: poetry run pytest
