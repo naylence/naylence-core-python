@@ -17,9 +17,7 @@ def secure_repr(*fields_to_hide: str) -> Callable[[Type[T]], Type[T]]:
 
     def decorator(model_cls: Type[T]) -> Type[T]:
         def __repr__(self: T) -> str:
-            data = self.model_dump(
-                by_alias=True, context={"mask_fields": {}}
-            )
+            data = self.model_dump(by_alias=True, context={"mask_fields": {}})
             # for f in fields_to_hide:
             #     if f in data and data[f] is not None:
             #         data[f] = f"<{f} hidden>"

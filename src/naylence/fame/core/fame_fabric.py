@@ -16,7 +16,10 @@ from naylence.fame.core.protocol.frames import DataFrame
 from naylence.fame.core.service.fame_service import FameService
 from naylence.fame.core.util.constants import DEFAULT_INVOKE_TIMEOUT_MILLIS
 from naylence.fame.core.util.extension_manager import ExtensionManager
-from naylence.fame.core.util.resource_factory_registry import create_default_resource, create_resource
+from naylence.fame.core.util.resource_factory_registry import (
+    create_default_resource,
+    create_resource,
+)
 
 
 _FABRIC_STACK: ContextVar[list["FameFabric"]] = ContextVar("_FABRIC_STACK", default=[])
@@ -190,24 +193,20 @@ class FameFabric(ABC):
             async with FameFabric.from_config(cfg) as fab:
                 ...
         """
-        
+
         from naylence.fame.core.fame_fabric_factory import FameFabricFactory
 
         @asynccontextmanager
         async def _ctx():
             # 🔑  single line: resolve factory & create concrete fabric
-            
+
             ExtensionManager.lazy_init(
                 group="naylence.fabric", base_type=FameFabricFactory
             )
             if cfg:
-                fabric = await create_resource(
-                    FameFabricFactory, cfg, **kwargs
-                )
+                fabric = await create_resource(FameFabricFactory, cfg, **kwargs)
             else:
-                fabric = await create_default_resource(
-                    FameFabricFactory, **kwargs
-                )
+                fabric = await create_default_resource(FameFabricFactory, **kwargs)
                 assert fabric, "No default FameFabricFactory registered"
 
             async with fabric:  # delegates to __aenter__/__aexit__
@@ -230,4 +229,3 @@ class FameFabric(ABC):
 
             return _noop()
         return cls.create(**opts)
-

@@ -10,7 +10,9 @@ T = TypeVar("T")
 _EXT_GROUP_PREFIX = "naylence."
 
 _EXT_MANAGER_CACHE: Dict[tuple[str, Type[Any]], "ExtensionManager[Any]"] = {}
-_EXT_MANAGER_LOCK = threading.RLock()  # RLock allows same thread to acquire multiple times
+_EXT_MANAGER_LOCK = (
+    threading.RLock()
+)  # RLock allows same thread to acquire multiple times
 
 
 class ExtensionManager(Generic[T]):
@@ -93,7 +95,7 @@ class ExtensionManager(Generic[T]):
     def get_instance(self, name: Optional[str] = None, *args: Any, **kwargs: Any) -> T:
         """
         Retrieve a cached factory instance for the given name.
-        
+
         :param name: the plugin name to get an instance for
         :param args: positional arguments to pass to the factory constructor (only used on first creation)
         :param kwargs: keyword arguments to pass to the factory constructor (only used on first creation)
@@ -108,7 +110,7 @@ class ExtensionManager(Generic[T]):
     def clear_instance_cache(self, name: Optional[str] = None) -> None:
         """
         Clear cached factory instances.
-        
+
         :param name: specific plugin name to clear from cache, or None to clear all
         """
         if name is None:
@@ -119,7 +121,7 @@ class ExtensionManager(Generic[T]):
     def get_cached_instance_names(self) -> List[str]:
         """
         Get the names of all currently cached factory instances.
-        
+
         :returns: list of plugin names that have cached instances
         """
         return list(self._instance_cache.keys())
@@ -127,45 +129,50 @@ class ExtensionManager(Generic[T]):
     def get_default_extensions(self) -> List[str]:
         """
         Get all extension names that are marked as default.
-        
+
         :returns: list of extension names marked with is_default=True
         """
         defaults = []
         for name in self._registry.keys():
             instance = self._get_or_create_extension_instance(name)
-            if getattr(instance, 'is_default', False):
+            if getattr(instance, "is_default", False):
                 defaults.append(name)
         return defaults
 
-    def get_default_instance(self, *args: Any, **kwargs: Any) -> Optional[Tuple[T, str]]:
+    def get_default_instance(
+        self, *args: Any, **kwargs: Any
+    ) -> Optional[Tuple[T, str]]:
         """
         Get the default extension instance. Warns if multiple defaults exist.
-        
+
         :param args: positional arguments to pass to the factory constructor
         :param kwargs: keyword arguments to pass to the factory constructor
         :returns: default extension instance or None if no default found
         """
         defaults = self.get_default_extensions()
-        
+
         if not defaults:
             return None
-        
+
         if len(defaults) > 1:
             import logging
+
             logger = logging.getLogger(__name__)
             logger.warning(
                 f"Multiple default implementations found for {self._base_type.__name__}: {defaults}. "
                 f"Using '{defaults[0]}'. Consider configuring explicit type."
             )
-        
+
         instance = self._get_or_create_extension_instance(defaults[0], *args, **kwargs)
         return (instance, defaults[0]) if instance else None
 
-    def get_best_default_instance(self, *args: Any, **kwargs: Any) -> Optional[Tuple[T, str]]:
+    def get_best_default_instance(
+        self, *args: Any, **kwargs: Any
+    ) -> Optional[Tuple[T, str]]:
         """
         Get the best default extension instance by priority.
         Selects the highest priority among all default-eligible extensions.
-        
+
         :param args: positional arguments to pass to the factory constructor
         :param kwargs: keyword arguments to pass to the factory constructor
         :returns: best default extension instance or None if no default found
@@ -174,36 +181,39 @@ class ExtensionManager(Generic[T]):
         candidates = []
         for name in self._registry.keys():
             instance = self._get_or_create_extension_instance(name)
-            is_default = getattr(instance, 'is_default', False)
-            priority = getattr(instance, 'priority', 0)
-            
+            is_default = getattr(instance, "is_default", False)
+            priority = getattr(instance, "priority", 0)
+
             # Only consider factories marked as defaults
             if is_default:
                 candidates.append((name, instance, priority))
-        
+
         if not candidates:
             return None
-        
+
         # Sort by priority (highest first) and pick the best
         candidates.sort(key=lambda x: x[2], reverse=True)
         best_name, best_instance, best_priority = candidates[0]
-        
+
         # Log selection if multiple candidates exist
         if len(candidates) > 1:
             import logging
+
             logger = logging.getLogger(__name__)
             logger.debug(
                 f"Selected best default for {self._base_type.__name__}: '{best_name}' "
                 f"(priority={best_priority}) among {[f'{c[0]}(p={c[2]})' for c in candidates]}"
             )
-        
+
         return (best_instance, best_name)
 
-    def _get_or_create_extension_instance(self, name: str, *args: Any, **kwargs: Any) -> T:
+    def _get_or_create_extension_instance(
+        self, name: str, *args: Any, **kwargs: Any
+    ) -> T:
         """
         Get or create a cached factory instance for the given plugin name.
         Factory instances are cached since they're typically stateless.
-        
+
         :param name: the plugin name to get an instance for
         :param args: positional arguments to pass to the factory constructor (only used on first creation)
         :param kwargs: keyword arguments to pass to the factory constructor (only used on first creation)
@@ -232,16 +242,16 @@ class ExtensionManager(Generic[T]):
         :returns:         the cached ExtensionManager instance
         """
         key = (group, base_type)  # composite key keeps different base_types distinct
-        
+
         with _EXT_MANAGER_LOCK:
             mgr = _EXT_MANAGER_CACHE.get(key)
             if mgr is None:
                 mgr = ExtensionManager(group=group, base_type=base_type)
                 _EXT_MANAGER_CACHE[key] = mgr
-        
+
         # cast narrows the generic type for the caller
         return cast("ExtensionManager[T]", mgr)
-    
+
     @classmethod
     def get_extensions_by_type(cls, base_type: Type[Any]) -> Dict[str, Any]:
         """
@@ -267,12 +277,14 @@ class ExtensionManager(Generic[T]):
         :returns: an instance of the plugin
         :raises ValueError: if no suitable ExtensionManager or plugin is found
         """
-        mgr = ExtensionManager.lazy_init(group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type)
-        
+        mgr = ExtensionManager.lazy_init(
+            group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type
+        )
+
         # Check if this manager has the requested plugin name
         if name in mgr._registry:
             return mgr._get_or_create_extension_instance(name, *args, **kwargs)
-        
+
         # If plugin not found, provide helpful error message
         raise ValueError(
             f"Plugin '{name}' not found in ExtensionManager for base_type '{base_type.__name__}'. "
@@ -280,29 +292,37 @@ class ExtensionManager(Generic[T]):
         )
 
     @staticmethod
-    def get_default_extension_by_type(base_type: Type[T], *args: Any, **kwargs: Any) -> Optional[Tuple[T, str]]:
+    def get_default_extension_by_type(
+        base_type: Type[T], *args: Any, **kwargs: Any
+    ) -> Optional[Tuple[T, str]]:
         """
         Get the default extension instance for a given base type.
-        
+
         :param base_type: the base type/interface to get default for
         :param args: positional arguments to pass to the factory constructor
         :param kwargs: keyword arguments to pass to the factory constructor
         :returns: default extension instance or None if no default found
         """
-        mgr = ExtensionManager.lazy_init(group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type)
+        mgr = ExtensionManager.lazy_init(
+            group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type
+        )
         return mgr.get_default_instance(*args, **kwargs)
 
     @staticmethod
-    def get_best_default_extension_by_type(base_type: Type[T], *args: Any, **kwargs: Any) -> Optional[Tuple[T, str]]:
+    def get_best_default_extension_by_type(
+        base_type: Type[T], *args: Any, **kwargs: Any
+    ) -> Optional[Tuple[T, str]]:
         """
         Get the best default extension instance for a given base type by priority.
-        
+
         :param base_type: the base type/interface to get best default for
         :param args: positional arguments to pass to the factory constructor
         :param kwargs: keyword arguments to pass to the factory constructor
         :returns: best default extension instance or None if no default found
         """
-        mgr = ExtensionManager.lazy_init(group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type)
+        mgr = ExtensionManager.lazy_init(
+            group=_EXT_GROUP_PREFIX + base_type.__name__, base_type=base_type
+        )
         return mgr.get_best_default_instance(*args, **kwargs)
 
     @staticmethod
@@ -336,7 +356,9 @@ class ExtensionManager(Generic[T]):
         return result
 
     @staticmethod
-    def find_all_extension_instances_by_base_type(base_type: Type[T], *args: Any, **kwargs: Any) -> Dict[str, T]:
+    def find_all_extension_instances_by_base_type(
+        base_type: Type[T], *args: Any, **kwargs: Any
+    ) -> Dict[str, T]:
         """
         Find all plugin instances across all cached ExtensionManager instances that are
         compatible with the given base_type. Instances are cached within their respective managers.
@@ -361,16 +383,20 @@ class ExtensionManager(Generic[T]):
                     if plugin_name in result:
                         # Use group-prefixed name to avoid conflicts
                         prefixed_name = f"{cached_group}:{plugin_name}"
-                        result[prefixed_name] = mgr._get_or_create_extension_instance(plugin_name, *args, **kwargs)
+                        result[prefixed_name] = mgr._get_or_create_extension_instance(
+                            plugin_name, *args, **kwargs
+                        )
                     else:
-                        result[plugin_name] = mgr._get_or_create_extension_instance(plugin_name, *args, **kwargs)
+                        result[plugin_name] = mgr._get_or_create_extension_instance(
+                            plugin_name, *args, **kwargs
+                        )
 
         return result
 
     @staticmethod
-    def get_all_extension_managers() -> Dict[
-        tuple[str, Type[Any]], "ExtensionManager[Any]"
-    ]:
+    def get_all_extension_managers() -> (
+        Dict[tuple[str, Type[Any]], "ExtensionManager[Any]"]
+    ):
         """
         Get a copy of all cached ExtensionManager instances.
 
@@ -386,7 +412,7 @@ class ExtensionManager(Generic[T]):
         Import the entry-point whose name equals `type_name` in any
         'naylence.*' group. This triggers registration of plugin classes
         via their respective registration mechanisms.
-        
+
         :param type_name: the plugin/extension name to search for and load
         :returns: True if a matching entry-point was found and loaded, False otherwise
         """
@@ -410,5 +436,5 @@ class ExtensionManager(Generic[T]):
                     pass
                 # Note: we continue searching in case there are multiple matches
                 # across different groups, but return True after first successful load
-        
+
         return False

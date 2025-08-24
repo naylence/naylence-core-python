@@ -1,4 +1,3 @@
-from math import exp
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
@@ -10,34 +9,48 @@ from naylence.fame.core.protocol.response_type import FameResponseType
 class AuthorizationContext(BaseModel):
     """
     Enhanced authorization context supporting 2-step auth process.
-    
+
     Step 1 (Authentication): Validates credentials and populates this context
     Step 2 (Authorization): Uses this context to authorize specific operations
     """
-    
+
     # Authentication results
-    authenticated: bool = Field(default=False, description="Whether authentication succeeded")
-    authorized: bool = Field(default=False, description="Whether authorization succeeded")
-    
-    principal: Optional[str] = Field(default=None, description="Authenticated principal/user ID")
+    authenticated: bool = Field(
+        default=False, description="Whether authentication succeeded"
+    )
+    authorized: bool = Field(
+        default=False, description="Whether authorization succeeded"
+    )
+
+    principal: Optional[str] = Field(
+        default=None, description="Authenticated principal/user ID"
+    )
     claims: Dict[str, Any] = Field(default_factory=dict, description="Token claims")
-    
-    # Authorization results  
-    granted_scopes: List[str] = Field(default_factory=list, description="Granted permission scopes")
-    restrictions: Dict[str, Any] = Field(default_factory=dict, description="Authorization restrictions")
-    
+
+    # Authorization results
+    granted_scopes: List[str] = Field(
+        default_factory=list, description="Granted permission scopes"
+    )
+    restrictions: Dict[str, Any] = Field(
+        default_factory=dict, description="Authorization restrictions"
+    )
+
     # Context metadata
-    auth_method: Optional[str] = Field(default=None, description="Authentication method used")
-    expires_at: Optional[datetime] = Field(default=None, description="When authorization expires")
-    
+    auth_method: Optional[str] = Field(
+        default=None, description="Authentication method used"
+    )
+    expires_at: Optional[datetime] = Field(
+        default=None, description="When authorization expires"
+    )
+
     def has_scope(self, scope: str) -> bool:
         """Check if a specific scope is granted"""
         return scope in self.granted_scopes
-    
+
     def has_any_scope(self, scopes: List[str]) -> bool:
         """Check if any of the specified scopes are granted"""
         return any(scope in self.granted_scopes for scope in scopes)
-    
+
     def is_valid(self) -> bool:
         """Check if authorization context is still valid"""
         if not self.authenticated:
@@ -67,13 +80,13 @@ class SecurityContext(BaseModel):
         default=None,
         description="ID of the virtual secure channel used for message delivery",
     )
-    
+
     authorization: Optional[AuthorizationContext] = Field(
         default=None,
         description="Authorization context containing claims and permissions",
     )
-    
-    
+
+
 class FameDeliveryContext(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

@@ -46,20 +46,20 @@ def _validate_host(host: str, allow_wildcards: bool = False) -> None:
     """Validate host-like part of address. Wildcards allowed only in logical contexts."""
     if not host:
         return
-    
+
     # Split host into segments separated by dots
     segments = host.split(".")
     for i, segment in enumerate(segments):
         if not segment:  # Empty segment
             raise ValueError(f"Empty host segment in {host!r}")
-        
+
         # Check wildcards
         if segment == _POOL_WILDCARD:
             # Allow wildcards in leftmost position for pool addresses like math@*.fame.fabric
             if i != 0:
                 raise ValueError(f"Wildcard '*' must be leftmost segment in: {host!r}")
             continue
-            
+
         if not _HOST_SEGMENT_RE.match(segment):
             raise ValueError(f"Bad host segment {segment!r} - use A-Za-z0-9.-")
 
@@ -68,7 +68,7 @@ def _validate_path(path: str) -> None:
     """Validate path part of address. Wildcards are NOT allowed in paths."""
     if not path:
         return
-        
+
     if path == "/":
         return
 
@@ -89,19 +89,19 @@ def _validate_path(path: str) -> None:
 def parse_address(address: str) -> Tuple[str, str]:
     """
     Parse a FAME address supporting both host-like and path-like notation.
-    
+
     Formats supported:
     - 'participant@/path'           (traditional path-only)
-    - 'participant@host.name'       (host-only)  
+    - 'participant@host.name'       (host-only)
     - 'participant@host.name/path'  (host with path)
     - 'participant@*.host.name'     (pool address with leftmost wildcard)
-    
+
     Rules:
     - participant: [A-Z a-z 0-9 _ -]+
     - host: dot-separated segments [A-Za-z0-9.-]+, wildcards (*) allowed in leftmost position only
     - path: '/' seg ('/' seg)*, NO wildcards allowed in path segments
     - At least one of host or path must be present
-    
+
     Returns:
         Tuple of (participant, combined_location) where combined_location
         preserves the original format for backward compatibility.
@@ -112,10 +112,10 @@ def parse_address(address: str) -> Tuple[str, str]:
 
     name, location = address[:at], address[at + 1 :]
     _validate_participant(name)
-    
+
     if not location:
         raise ValueError("Location part cannot be empty")
-    
+
     # Determine if this is host-only, path-only, or host+path
     if location.startswith("/"):
         # Traditional path-only format: participant@/path
@@ -128,19 +128,19 @@ def parse_address(address: str) -> Tuple[str, str]:
     else:
         # Host-only format: participant@host.name or participant@*.host.name
         _validate_host(location, allow_wildcards=True)
-    
+
     return name, location
 
 
 def parse_address_components(address: str) -> Tuple[str, Optional[str], Optional[str]]:
     """
     Parse a FAME address into its constituent components.
-    
+
     Returns:
         Tuple of (participant, host, path) where:
         - participant: always present
         - host: present if host-like notation used
-        - path: present if path-like notation used  
+        - path: present if path-like notation used
         - At least one of host or path will be non-None
     """
     at = address.rfind("@")
@@ -149,10 +149,10 @@ def parse_address_components(address: str) -> Tuple[str, Optional[str], Optional
 
     name, location = address[:at], address[at + 1 :]
     _validate_participant(name)
-    
+
     if not location:
         raise ValueError("Location part cannot be empty")
-    
+
     # Determine format and extract components
     if location.startswith("/"):
         # Traditional path-only format: participant@/path
@@ -174,14 +174,14 @@ def parse_address_components(address: str) -> Tuple[str, Optional[str], Optional
 def format_address(name: str, location: str) -> FameAddress:
     """
     Create a FAME address from participant and location.
-    
+
     Args:
         name: participant name
         location: either path (/path), host (host.name), or host/path (host.name/path)
                  Wildcards allowed in host part only (*.host.name)
     """
     _validate_participant(name)
-    
+
     # Validate the location part based on its format
     if location.startswith("/"):
         # Path-only format
@@ -194,31 +194,33 @@ def format_address(name: str, location: str) -> FameAddress:
     else:
         # Host-only format
         _validate_host(location, allow_wildcards=True)
-    
+
     return FameAddress(f"{name}@{location}")
 
 
-def format_address_from_components(name: str, host: Optional[str] = None, path: Optional[str] = None) -> FameAddress:
+def format_address_from_components(
+    name: str, host: Optional[str] = None, path: Optional[str] = None
+) -> FameAddress:
     """
     Create a FAME address from separate components.
-    
+
     Args:
         name: participant name
-        host: optional host part (e.g., "fame.fabric", "child.fame.fabric", "*.fame.fabric") 
+        host: optional host part (e.g., "fame.fabric", "child.fame.fabric", "*.fame.fabric")
         path: optional path part (e.g., "/", "/api/v1") - NO wildcards allowed in paths
-        
+
     At least one of host or path must be provided.
     """
     _validate_participant(name)
-    
+
     if not host and not path:
         raise ValueError("At least one of host or path must be provided")
-    
+
     if host:
         _validate_host(host, allow_wildcards=True)
     if path:
         _validate_path(path)
-    
+
     if host and path:
         # Both present: host/path format
         location = f"{host}{path}"
@@ -226,9 +228,9 @@ def format_address_from_components(name: str, host: Optional[str] = None, path: 
         # Host only
         location = host
     else:
-        # Path only 
+        # Path only
         location = path
-    
+
     return FameAddress(f"{name}@{location}")
 
 

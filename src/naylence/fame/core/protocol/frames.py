@@ -29,13 +29,13 @@ class DeliveryAckFrame(FameFrame):
     type: Literal["DeliveryAck"] = "DeliveryAck"
 
     ok: bool = True  # True ⇒ ACK, False ⇒ NACK
-    code: str | None  = None
+    code: str | None = None
     reason: str | None = None
 
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, extra="ignore"
     )
-    
+
 
 class Stickiness(BaseModel):
     """
@@ -79,7 +79,7 @@ class AddressBindFrame(FameFrame):
 
 
 class AddressBindAckFrame(DeliveryAckFrame):
-    type: Literal["AddressBindAck"] = "AddressBindAck" # type: ignore
+    type: Literal["AddressBindAck"] = "AddressBindAck"  # type: ignore
     address: FameAddress
 
     model_config = ConfigDict(
@@ -97,7 +97,7 @@ class AddressUnbindFrame(FameFrame):
 
 
 class AddressUnbindAckFrame(DeliveryAckFrame):
-    type: Literal["AddressUnbindAck"] = "AddressUnbindAck" # type: ignore
+    type: Literal["AddressUnbindAck"] = "AddressUnbindAck"  # type: ignore
     address: FameAddress
 
     model_config = ConfigDict(
@@ -117,7 +117,7 @@ class NodeHeartbeatFrame(FameFrame):
 
 
 class NodeHeartbeatAckFrame(DeliveryAckFrame):
-    type: Literal["NodeHeartbeatAck"] = "NodeHeartbeatAck" # type: ignore
+    type: Literal["NodeHeartbeatAck"] = "NodeHeartbeatAck"  # type: ignore
     address: Optional[FameAddress] = None
     routing_epoch: Optional[str] = None
     payload: Optional[Any] = None
@@ -197,14 +197,12 @@ class NodeHelloFrame(FameFrame):
     instance_id: str
 
     security_settings: Optional[SecuritySettings] = Field(
-        default=None,
-        description="Desired security settings for the child node."
+        default=None, description="Desired security settings for the child node."
     )
 
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, extra="ignore"
     )
-
 
 
 class NodeWelcomeFrame(FameFrame):
@@ -236,7 +234,7 @@ class NodeWelcomeFrame(FameFrame):
 
     security_settings: Optional[SecuritySettings] = Field(
         default=None,
-        description="Security settings the parent expects the child to follow."
+        description="Security settings the parent expects the child to follow.",
     )
 
     model_config = ConfigDict(
@@ -259,11 +257,11 @@ class NodeAttachFrame(FameFrame):
     )
 
     keys: Optional[list[dict]] = Field(default=None)
-    
+
     supported_inbound_connectors: Optional[List[dict[str, Any]]] = Field(
         default=None,
-            description="List of inbound connector directives the child or peer supports "
-            "for reverse connections initiated by the parent."
+        description="List of inbound connector directives the child or peer supports "
+        "for reverse connections initiated by the parent.",
     )
 
     # Optional stickiness payload used to advertise capabilities (child → parent)
@@ -292,7 +290,7 @@ class NodeAttachFrame(FameFrame):
 
 
 class NodeAttachAckFrame(DeliveryAckFrame):
-    type: Literal["NodeAttachAck"] = "NodeAttachAck" # type: ignore
+    type: Literal["NodeAttachAck"] = "NodeAttachAck"  # type: ignore
     target_system_id: Optional[str] = Field(default=None)  # filled if success == True
     assigned_path: Optional[str] = Field(default=None)
     target_physical_path: Optional[str] = Field(default=None)
@@ -338,7 +336,7 @@ class CapabilityAdvertiseFrame(FameFrame):
 
 
 class CapabilityAdvertiseAckFrame(DeliveryAckFrame):
-    type: Literal["CapabilityAdvertiseAck"] = "CapabilityAdvertiseAck" # type: ignore
+    type: Literal["CapabilityAdvertiseAck"] = "CapabilityAdvertiseAck"  # type: ignore
     capabilities: list[str]
     address: FameAddress
 
@@ -357,7 +355,7 @@ class CapabilityWithdrawFrame(FameFrame):
 
 
 class CapabilityWithdrawAckFrame(DeliveryAckFrame):
-    type: Literal["CapabilityWithdrawAck"] = "CapabilityWithdrawAck" # type: ignore
+    type: Literal["CapabilityWithdrawAck"] = "CapabilityWithdrawAck"  # type: ignore
     capabilities: list[str]
     address: FameAddress
 
@@ -463,7 +461,7 @@ class SecureOpenFrame(FameFrame):
 class SecureAcceptFrame(DeliveryAckFrame):
     """Server → Client: accept or reject the channel."""
 
-    type: Literal["SecureAccept"] = "SecureAccept" # type: ignore
+    type: Literal["SecureAccept"] = "SecureAccept"  # type: ignore
     cid: str  # Channel id, same as in SecureOpen
     eph_pub: bytes = Field(
         description="Server's 32-byte X25519 public key", min_length=32, max_length=32

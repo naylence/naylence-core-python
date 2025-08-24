@@ -48,7 +48,7 @@ from .protocol.flow import CreditUpdateFrame, FlowFlags
 from .protocol.channel_message import (
     FameChannelMessage,
     extract_envelope_and_context,
-    create_channel_message
+    create_channel_message,
 )
 
 from .protocol.frames import (
@@ -75,7 +75,7 @@ from .protocol.frames import (
     SecureOpenFrame,
     SecureAcceptFrame,
     SecureCloseFrame,
-    Stickiness
+    Stickiness,
 )
 
 from .rpc.jsonrpc import make_request, parse_request, make_response, parse_response
@@ -122,7 +122,7 @@ __all__ = [
     # address
     "FameAddress",
     "format_address",
-    "format_address_from_components", 
+    "format_address_from_components",
     "parse_address",
     "parse_address_components",
     "make_fame_address",
@@ -174,7 +174,7 @@ __all__ = [
     "SecureAcceptFrame",
     "SecureCloseFrame",
     "SenderProtocol",
-    "SecuritySettings", 
+    "SecuritySettings",
     "SigningMaterial",
     "AuthorizationContext",
     "FameDeliveryContext",

@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, Generic, Optional, Protocol, TypeVar, List, Union
+from typing import Dict as _Dict
 
 from pydantic import BaseModel, ConfigDict, Field, SerializationInfo, field_serializer
 from pydantic.alias_generators import to_camel
@@ -64,10 +65,14 @@ T = TypeVar(
 AllFramesUnion = Union[FameFrameUnion, CreditUpdateFrame]
 
 # define exactly what value types are allowed in meta
-# Forward reference needed for recursive type definition
-from typing import Dict as _Dict
-
-MetaValue = Union[str, int, float, bool, List[Union[str, int, float, bool]], _Dict[str, Union[str, int, float, bool]]]
+MetaValue = Union[
+    str,
+    int,
+    float,
+    bool,
+    List[Union[str, int, float, bool]],
+    _Dict[str, Union[str, int, float, bool]],
+]
 
 
 ENVELOPE_VERSION = "1.0"
@@ -264,5 +269,5 @@ class EnvelopeFactory(Protocol):
         flags: Optional[FlowFlags] = FlowFlags.NONE,
         timestamp: Optional[datetime] = None,
         corr_id: Optional[str] = None,
-        response_type: Optional[FameResponseType] = None
+        response_type: Optional[FameResponseType] = None,
     ) -> FameEnvelope: ...

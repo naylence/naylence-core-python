@@ -17,7 +17,9 @@ class ResourceFactory(Protocol, Generic[T, C]):
     is_default: bool = False  # Mark factory as default implementation
     priority: int = 0  # Priority for default selection (higher values win)
 
-    async def create(self, config: Optional[C | dict[str, Any]] = None, **kwargs: Any) -> T:
+    async def create(
+        self, config: Optional[C | dict[str, Any]] = None, **kwargs: Any
+    ) -> T:
         """
         Given a config of type C, produce or raise for resource of type T.
         """

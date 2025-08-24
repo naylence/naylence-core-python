@@ -12,7 +12,6 @@ from typing import (
     overload,
 )
 
-from httpx import get
 from pydantic import BaseModel
 
 from naylence.fame.core.util.extension_manager import ExtensionManager
@@ -52,7 +51,9 @@ def register_factory(
     """
     type_name = resource_type or getattr(factory, "type", None)
     if not type_name:
-        raise ValueError(f"Either 'resource_type' must be provided or factory must have a 'type' attribute")
+        raise ValueError(
+            "Either 'resource_type' must be provided or factory must have a 'type' attribute"
+        )
     _factory_registry.setdefault(iface, {})[type_name] = factory
 
 
@@ -93,9 +94,7 @@ C1 = TypeVar("C1")  # any config class
 
 @overload
 async def create_resource(
-    iface: Type[ResourceFactory[T1, C1]],
-    config: C1,
-    **kwargs: Any
+    iface: Type[ResourceFactory[T1, C1]], config: C1, **kwargs: Any
 ) -> T1: ...
 
 
@@ -122,7 +121,7 @@ async def create_resource(
 
     if not type:
         raise ValueError(f"Config {config!r} does not have a 'type' attribute")
-    
+
     extension: ResourceFactory = ExtensionManager.get_extension_by_name_and_type(
         name=type, base_type=iface
     )
@@ -139,7 +138,7 @@ async def create_default_resource(
     """
     Create a resource using the best available default implementation for the given interface.
     Uses priority-based selection if available, falling back to legacy single-default behavior.
-    
+
     :param iface: the resource factory interface
     :param config: optional configuration (without 'type' field)
     :param kwargs: additional keyword arguments
@@ -154,10 +153,11 @@ async def create_default_resource(
 
     if ext is None:
         import logging
+
         logger = logging.getLogger(__name__)
         logger.warning(f"default_resource_factory_not_found_for_type_{iface.__name__}")
         return None
-    
+
     default_factory = ext[0]
     instance_type = ext[1]
     # Merge config with default type
@@ -165,7 +165,7 @@ async def create_default_resource(
     if isinstance(final_config, dict):
         final_config = final_config.copy()
         final_config.setdefault("type", instance_type)
-    
+
     return await default_factory.create(final_config, **kwargs)
 
 
@@ -181,7 +181,9 @@ class CompositeFactory(Generic[T_co, C_contra], ResourceFactory[T_co, C_contra])
         self.iface_name = iface.__name__
         self.type = f"composite-{self.iface_name}"
 
-    async def create(self, config: Optional[C_contra | dict[str, Any]] = None, **kwargs: Any) -> T_co:
+    async def create(
+        self, config: Optional[C_contra | dict[str, Any]] = None, **kwargs: Any
+    ) -> T_co:
         if not config:
             raise ValueError(f"Missing config {self.iface_name}")
 
@@ -193,7 +195,7 @@ class CompositeFactory(Generic[T_co, C_contra], ResourceFactory[T_co, C_contra])
 
         if not type:
             raise ValueError(f"Config {config!r} does not have a 'type' attribute")
-        
+
         extension: ResourceFactory = ExtensionManager.get_extension_by_name_and_type(
             name=type, base_type=self.iface
         )
