@@ -66,7 +66,9 @@ def test_priority_selection():
     factory_instance, factory_type = result
 
     # Should select the advanced factory due to higher priority
-    assert factory_type == "advanced", f"Selected wrong factory (type: {factory_type}), expected 'advanced'"
+    assert (
+        factory_type == "advanced"
+    ), f"Selected wrong factory (type: {factory_type}), expected 'advanced'"
     print(f"✅ Correctly selected advanced factory (type: {factory_type})")
 
 
@@ -84,8 +86,12 @@ def test_only_basic_available():
     factory_instance, factory_type = result
 
     # Should select the basic factory since it's the only one available
-    assert factory_type == "basic", f"Selected wrong factory (type: {factory_type}), expected 'basic'"
-    print(f"✅ Correctly selected basic factory when only option (type: {factory_type})")
+    assert (
+        factory_type == "basic"
+    ), f"Selected wrong factory (type: {factory_type}), expected 'basic'"
+    print(
+        f"✅ Correctly selected basic factory when only option (type: {factory_type})"
+    )
 
 
 def test_fallback_compatibility():
@@ -103,5 +109,8 @@ def test_fallback_compatibility():
     factory_instance, factory_type = result
 
     # Should find a default (may warn about multiple)
-    assert factory_type in ["basic", "advanced"], f"Legacy method failed (type: {factory_type})"
+    assert factory_type in [
+        "basic",
+        "advanced",
+    ], f"Legacy method failed (type: {factory_type})"
     print(f"✅ Legacy method found default factory (type: {factory_type})")

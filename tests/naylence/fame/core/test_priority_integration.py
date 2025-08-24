@@ -67,8 +67,12 @@ async def test_create_default_resource():
 
     # Should select the advanced factory due to higher priority
     assert resource is not None, "create_default_resource returned None"
-    assert resource.name == "advanced", f"create_default_resource selected wrong factory (resource.name: {resource.name}), expected 'advanced'"
-    print(f"✅ create_default_resource correctly selected advanced factory (resource.name: {resource.name})")
+    assert (
+        resource.name == "advanced"
+    ), f"create_default_resource selected wrong factory (resource.name: {resource.name}), expected 'advanced'"
+    print(
+        f"✅ create_default_resource correctly selected advanced factory (resource.name: {resource.name})"
+    )
 
 
 @pytest.mark.asyncio
@@ -90,6 +94,9 @@ async def test_create_default_resource_with_config():
 
     # Should still select the advanced factory
     assert resource is not None, "create_default_resource with config returned None"
-    assert resource.name == "advanced", f"create_default_resource with config selected wrong factory (resource.name: {resource.name}), expected 'advanced'"
-    print(f"✅ create_default_resource with config correctly selected advanced factory (resource.name: {resource.name})")
-
+    assert (
+        resource.name == "advanced"
+    ), f"create_default_resource with config selected wrong factory (resource.name: {resource.name}), expected 'advanced'"
+    print(
+        f"✅ create_default_resource with config correctly selected advanced factory (resource.name: {resource.name})"
+    )
