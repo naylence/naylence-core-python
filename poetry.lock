@@ -110,15 +110,15 @@ files = [
 ]
 
 [[package]]
-name = "naylence-factoria"
+name = "naylence-factory"
 version = "0.1.1"
 description = "Naylence resource factory and extension management framework"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "naylence_factoria-0.1.1-py3-none-any.whl", hash = "sha256:14ed7810d6e69db4673aae0cd10508abe0084899f0ba7040382f8c6ee50a0a98"},
-    {file = "naylence_factoria-0.1.1.tar.gz", hash = "sha256:ecbb392d2d130f52f09c105d2f71a504539bfd785793224a080334e375800a49"},
+    {file = "naylence_factory-0.1.1-py3-none-any.whl", hash = "sha256:f7225004fd9c817cd37499f4a1afd9beaaf2cf23cc1e717078f87735fbcb05e9"},
+    {file = "naylence_factory-0.1.1.tar.gz", hash = "sha256:32728bd1ce04e8a0ffdbfcb03463ef9aeaf650f94225c0cfcaabb242f3e0ade9"},
 ]
 
 [package.dependencies]
@@ -406,14 +406,14 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.14.1"
+version = "4.15.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "typing_extensions-4.14.1-py3-none-any.whl", hash = "sha256:d1e1e3b58374dc93031d6eda2420a48ea44a36c2b4766a4fdeb3710755731d76"},
-    {file = "typing_extensions-4.14.1.tar.gz", hash = "sha256:38b39f4aeeab64884ce9f74c94263ef78f3c22467c8724005483154c26648d36"},
+    {file = "typing_extensions-4.15.0-py3-none-any.whl", hash = "sha256:f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548"},
+    {file = "typing_extensions-4.15.0.tar.gz", hash = "sha256:0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466"},
 ]
 
 [[package]]
@@ -434,4 +434,4 @@ typing-extensions = ">=4.12.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "829d685caed0d9f2f37b86154dc30eac204cf79bc459c08bf4471a605fe2f953"
+content-hash = "cdde860de98567321e4b2c72f85518ab3b3e80cca1e494388cc7c1ab25c0fcb8"
