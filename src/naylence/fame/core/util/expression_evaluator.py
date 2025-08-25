@@ -1,6 +1,6 @@
 import os
 import re
-from typing import Any
+from typing import Any, Optional
 
 
 class MissingEnvironmentVariableError(Exception):
@@ -45,7 +45,7 @@ class ExpressionEvaluator:
         return cls._env_pattern.search(value) is not None
 
     @classmethod
-    def evaluate(cls, value: Any, target_type: type = None) -> Any:
+    def evaluate(cls, value: Any, target_type: Optional[type] = None) -> Any:
         """
         Evaluate expressions in the given value and optionally convert to target type.
 

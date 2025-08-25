@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pydantic import Field
 from typing import Any, Dict, Optional
-from naylence.fame.core.util.resource_config import ResourceConfig
+from naylence.fame.factory import ResourceConfig
 
 
 class FameFabricConfig(ResourceConfig):

@@ -18,7 +18,7 @@ from naylence.fame.core.util.constants import (
     DEFAULT_INVOKE_TIMEOUT_MILLIS,
     DEFAULT_POLLING_TIMEOUT_MS,
 )
-from naylence.fame.core.util.resource_factory import ResourceFactory
+from naylence.fame.factory import ResourceFactory
 
 
 class InvokeProtocol(Protocol):

@@ -1,6 +1,6 @@
 [project]
 name = "naylence-core"
-version = "0.1.11"
+version = "0.1.12"
 description = "Naylence Core"
 authors = [
     {name = "Naylence Dev",email = "naylencedev@gmail.com"}
@@ -19,7 +19,8 @@ classifiers = [
     "Topic :: System :: Distributed Computing",
 ]
 dependencies = [
-    "pydantic (>=2.11.4,<3.0.0)"
+    "pydantic (>=2.11.4,<3.0.0)",
+    "naylence-factoria (>=0)"
 ]
 
 [project.urls]
@@ -32,6 +33,13 @@ Documentation = "https://github.com/naylence/naylence-core-python#readme"
 packages = [
   { include = "naylence", from = "src"},
 ]
+
+# Package sources: allow fallback to TestPyPI for packages that
+# don't exist on PyPI yet (e.g., naylence-factoria while in early testing).
+[[tool.poetry.source]]
+name = "testpypi"
+url = "https://test.pypi.org/simple"
+priority = "supplemental"
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"

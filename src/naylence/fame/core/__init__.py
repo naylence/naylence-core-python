@@ -95,17 +95,18 @@ from .service.fame_service import (
 
 from .service.subscription import Subscription
 
-from .util.cloasable import Closeable
+from .util.closeable import Closeable
 from .util.constants import DEFAULT_INVOKE_TIMEOUT_MILLIS, DEFAULT_POLLING_TIMEOUT_MS
 from .util.id_generator import generate_id
-from .util.resource_factory import ResourceFactory
-from .util.resource_factory_registry import (
+from naylence.fame.factory import (
+    ResourceFactory,
+    ExpressionEnabledModel,
+    ResourceConfig,
     get_composite_factory,
     create_resource,
     create_default_resource,
     register_factory,
 )
-from .util.resource_config import ExpressionEnabledModel, ResourceConfig
 from .util.extension_manager import ExtensionManager
 from .util.expressions import Expressions
 

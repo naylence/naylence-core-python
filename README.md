@@ -25,6 +25,23 @@ poetry run black --check .
 poetry build
 ```
 
+#### Using local sibling dependencies during development
+
+This project depends on `naylence-factoria`. In development, you can point Poetry to a local checkout without changing `pyproject.toml`:
+
+```bash
+# Option A: temporary override (current venv only)
+poetry run pip install -e ../naylence-factoria-python
+
+# Option B: Poetry path override (persisted in poetry.lock)
+poetry add --path ../naylence-factoria-python naylence-factoria
+
+# Option C: PEP 582 editable via uv (optional)
+uv pip install -e ../naylence-factoria-python
+```
+
+When committing, keep `pyproject.toml` referencing the normal package (not the local path). CI will install from PyPI/TestPyPI via configured sources.
+
 ### Publishing
 
 - **Automatic**: Create a GitHub release to automatically publish to PyPI
