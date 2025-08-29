@@ -187,11 +187,7 @@ class FameFabric(ABC):
         """
         Build and manage a FameFabric using the `ResourceFactory` registry
         (see `create_resource`).
-
-        Example:
-            cfg = FameFabricConfig(impl="websocket", args={"url": "ws://…"})
-            async with FameFabric.from_config(cfg) as fab:
-                ...
+        
         """
 
         from naylence.fame.core.fame_fabric_factory import FameFabricFactory

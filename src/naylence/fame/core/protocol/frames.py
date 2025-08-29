@@ -211,6 +211,8 @@ class NodeWelcomeFrame(FameFrame):
     system_id: str
 
     target_system_id: Optional[str] = None
+    
+    target_physical_path: Optional[str] = None
 
     instance_id: str
 
@@ -221,8 +223,6 @@ class NodeWelcomeFrame(FameFrame):
     accepted_logicals: Optional[List[str]] = None
 
     rejected_logicals: Optional[List[str]] = None
-
-    parent_physical_path: Optional[str] = None
 
     connector_directive: Optional[dict[str, Any]] = None
 
