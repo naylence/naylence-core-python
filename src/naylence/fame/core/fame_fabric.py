@@ -15,8 +15,8 @@ from naylence.fame.core.protocol.envelope import (
 from naylence.fame.core.protocol.frames import DataFrame
 from naylence.fame.core.service.fame_service import FameService
 from naylence.fame.core.util.constants import DEFAULT_INVOKE_TIMEOUT_MILLIS
-from naylence.fame.core.util.extension_manager import ExtensionManager
 from naylence.fame.factory import (
+    ExtensionManager,
     create_default_resource,
     create_resource,
 )

@@ -224,7 +224,7 @@ class NodeWelcomeFrame(FameFrame):
 
     rejected_logicals: Optional[List[str]] = None
 
-    connector_directive: Optional[dict[str, Any]] = None
+    connection_grants: Optional[List[Any]] = None
 
     expires_at: Optional[datetime] = None
 

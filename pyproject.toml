@@ -1,6 +1,6 @@
 [project]
 name = "naylence-core"
-version = "0.1.14"
+version = "0.1.16"
 description = "Naylence Core"
 authors = [
     {name = "Naylence Dev",email = "naylencedev@gmail.com"}
@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
     "pydantic (>=2.11.4,<3.0.0)",
-    "naylence-factory (>=0.1.1,<0.2.0)"
+    "naylence-factory (>=0.1.2,<0.2.0)"
 ]
 
 [project.urls]

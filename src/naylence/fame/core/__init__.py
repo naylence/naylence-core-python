@@ -107,8 +107,6 @@ from naylence.fame.factory import (
     create_default_resource,
     register_factory,
 )
-from .util.extension_manager import ExtensionManager
-from .util.expressions import Expressions
 
 from .fame_fabric import FameFabric
 from .fame_fabric_factory import FameFabricFactory
@@ -219,9 +217,7 @@ __all__ = [
     "register_factory",
     "ExpressionEnabledModel",
     "ResourceConfig",
-    "ExtensionManager",
     "generate_id",
-    "Expressions",
     # fabric
     "FameFabric",
     "FameFabricFactory",
