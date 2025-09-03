@@ -211,7 +211,7 @@ class NodeWelcomeFrame(FameFrame):
     system_id: str
 
     target_system_id: Optional[str] = None
-    
+
     target_physical_path: Optional[str] = None
 
     instance_id: str

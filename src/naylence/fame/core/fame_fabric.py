@@ -187,7 +187,7 @@ class FameFabric(ABC):
         """
         Build and manage a FameFabric using the `ResourceFactory` registry
         (see `create_resource`).
-        
+
         """
 
         from naylence.fame.core.fame_fabric_factory import FameFabricFactory

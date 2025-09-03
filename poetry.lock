@@ -111,23 +111,18 @@ files = [
 
 [[package]]
 name = "naylence-factory"
-version = "0.1.2"
+version = "0.1.3"
 description = "Naylence resource factory and extension management framework"
 optional = false
 python-versions = ">=3.12"
 groups = ["main"]
 files = [
-    {file = "naylence_factory-0.1.2-py3-none-any.whl", hash = "sha256:fe038927ba0c390c8ab2964e4f885466b7a5ea760236b0c9c35ca2f28ddfcfc2"},
-    {file = "naylence_factory-0.1.2.tar.gz", hash = "sha256:f916f4ef89e525ee0f0011caf1d8403da73c3a63ca17fe745d271bd688dd5521"},
+    {file = "naylence_factory-0.1.3-py3-none-any.whl", hash = "sha256:69da5208c75a0905e2258eca30f25a4f5d72b63badb1f9d9a886e46d7a11c5ba"},
+    {file = "naylence_factory-0.1.3.tar.gz", hash = "sha256:02e2c3e1811f520544ea0539d8edef318c1a88c6000ce35f53db5d551ced4e38"},
 ]
 
 [package.dependencies]
 pydantic = ">=2.11.4,<3.0.0"
-
-[package.source]
-type = "legacy"
-url = "https://test.pypi.org/simple"
-reference = "testpypi"
 
 [[package]]
 name = "packaging"
@@ -434,4 +429,4 @@ typing-extensions = ">=4.12.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "c0da7a1ab1bbf216847d79c6fa3aa6fd45f74ea08b46e6162a70d3bff4b0857d"
+content-hash = "858c61ad1bd13bb3b29568ba9a439d11eedfbc6c100434199ebe38c31bee233a"
