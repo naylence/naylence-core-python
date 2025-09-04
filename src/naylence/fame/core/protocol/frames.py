@@ -258,9 +258,9 @@ class NodeAttachFrame(FameFrame):
 
     keys: Optional[list[dict]] = Field(default=None)
 
-    supported_inbound_connectors: Optional[List[dict[str, Any]]] = Field(
+    callback_grants: Optional[List[dict[str, Any]]] = Field(
         default=None,
-        description="List of inbound connector directives the child or peer supports "
+        description="List of inbound callback connection grants the child or peer supports "
         "for reverse connections initiated by the parent.",
     )
 
