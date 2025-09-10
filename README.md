@@ -1,3 +1,5 @@
+[![Join our Discord](https://img.shields.io/badge/Discord-Join%20Chat-blue?logo=discord)](https://discord.gg/nwZAeqdv7y)
+
 # Naylence Fame Core
 
 **Fame Core** is the low-level messaging backbone for the [Naylence](https://github.com/naylence) platform, providing the essential types, protocols, and interfaces for high-performance, addressable, and semantically routable message passing between AI agents and services.
