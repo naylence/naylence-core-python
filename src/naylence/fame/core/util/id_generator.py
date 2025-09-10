@@ -115,7 +115,7 @@ def default_node_fingerprint(extra_material: BytesLike | None = None) -> bytes:
 
 
 def generate_id(
-    length: int = 15,
+    length: int = 16,
     *,
     mode: str = "random",
     material: BytesLike | Iterable[BytesLike] | None = None,

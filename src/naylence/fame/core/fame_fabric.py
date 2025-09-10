@@ -12,7 +12,7 @@ from naylence.fame.core.protocol.envelope import (
     FameEnvelope,
     create_fame_envelope,
 )
-from naylence.fame.core.protocol.frames import DataFrame
+from naylence.fame.core.protocol.frames import DataFrame, DeliveryAckFrame
 from naylence.fame.core.service.fame_service import FameService
 from naylence.fame.core.util.constants import DEFAULT_INVOKE_TIMEOUT_MILLIS
 from naylence.fame.factory import (
@@ -36,14 +36,16 @@ class FameFabric(ABC):
     # ----- abstract interface --------------------------------------------------
 
     @abstractmethod
-    async def send(self, envelope: FameEnvelope) -> None: ...
+    async def send(
+        self, envelope: FameEnvelope, timeout_ms: Optional[int] = None
+    ) -> Optional[DeliveryAckFrame]: ...
 
     async def send_message(
         self,
         address: FameAddress | str,
         message: Any,
-    ) -> None:
-        await self.send(
+    ) -> Optional[DeliveryAckFrame]:
+        return await self.send(
             create_fame_envelope(
                 to=FameAddress(address), frame=DataFrame(payload=message)
             )
