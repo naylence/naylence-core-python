@@ -31,6 +31,9 @@ class DeliveryAckFrame(FameFrame):
     ok: bool = True  # True ⇒ ACK, False ⇒ NACK
     code: str | None = None
     reason: str | None = None
+    ref_id: str | None = (
+        None  # Optional reference id, typically envelope id being acked
+    )
 
     model_config = ConfigDict(
         alias_generator=to_camel, populate_by_name=True, extra="ignore"
