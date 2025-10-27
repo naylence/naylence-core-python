@@ -56,7 +56,7 @@ def make_response(
         resp = JSONRPCResponse(id=id, error=err)
     else:
         resp = JSONRPCResponse(id=id, result=result)
-    return resp.model_dump(by_alias=True)
+    return resp.model_dump(by_alias=True, exclude_none=True)
 
 
 def parse_response(payload: Mapping[str, Any]) -> JSONRPCResponse:

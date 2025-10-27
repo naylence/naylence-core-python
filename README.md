@@ -29,7 +29,7 @@ poetry build
 
 #### Using local sibling dependencies during development
 
-This project depends on `naylence-factoria`. In development, you can point Poetry to a local checkout without changing `pyproject.toml`:
+This project depends on `naylence-factory`. In development, you can point Poetry to a local checkout without changing `pyproject.toml`:
 
 ```bash
 # Option A: temporary override (current venv only)
